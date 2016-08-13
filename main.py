@@ -1,4 +1,4 @@
-import ConfigParser
+import ConfigParser, __builtin__
 
 from config.server import ServerConfig
 from net.server import TerrariaServer
@@ -10,7 +10,8 @@ def load_config():
 
 def main():
   config = load_config()
-  server = TerrariaServer(config)
+  
+  __builtin__.server = TerrariaServer(config)
   server.run()
 
 if __name__ == '__main__':

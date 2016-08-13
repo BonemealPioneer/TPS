@@ -12,44 +12,51 @@ logger = logging.getLogger()
 
 
 def tmpDebugWorldRemoveMe():
-  # THIS IS FOR DEBUG ONLY!!
-  w = World(platformClock=reactor)
-  w.time = 13500.0
-  w.name = "Debug"
-  w.width = 800
-  w.height = 600
-  w.spawn = (100,199)
-  w.isDay = True
-  w.worldSurface = 200
-  w.rockLayer = 400
-  topLeftTs = TileSection()
-  for y in range(4):
-    w.tileSections.append([])
-    for x in range(6):
-      ts = TileSection()
-      ts.x = x
-      ts.y = y
-      for ty in range(50, SECTION_HEIGHT):
-        for tx in range(SECTION_WIDTH):
-          ts.setTile(tx, ty, ironTile)
-      w.tileSections[y].append(ts)
-  return w
+    # THIS IS FOR DEBUG ONLY!!
+    w = World(platformClock=reactor)
+    w.time = 13500.0
+    w.name = "Debug"
+    w.width = 800
+    w.height = 600
+    w.spawn = (100, 199)
+    w.isDay = True
+    w.worldSurface = 200
+    w.rockLayer = 400
+    topLeftTs = TileSection()
+    for y in range(4):
+        w.tileSections.append([])
+        for x in range(6):
+            ts = TileSection()
+            ts.x = x
+            ts.y = y
+            for ty in range(50, SECTION_HEIGHT):
+                for tx in range(SECTION_WIDTH):
+                    ts.setTile(tx, ty, ironTile)
+            w.tileSections[y].append(ts)
+    return w
+
 
 class TerrariaServer:
-  """
-  The main server that handles everything
-  """
- 
-  def __init__(self, config):
-    self.config = config
-    self.world = tmpDebugWorldRemoveMe()
-    self.factory = TerrariaFactory(self.world, config)
-    serverEndpoint = "tcp:%d:interface=%s" % (self.config.listenPort, self.config.listenAddress)
-    self.endpoint = serverFromString(reactor, serverEndpoint)
+    """
+    The main server that handles everything
+    """
 
-  def run(self):
-    logger.debug("Starting Server")
-    self.endpoint.listen(self.factory)
-    logger.debug("Listening. %s:%d" % (self.config.listenAddress, self.config.listenPort))
-    self.world.start()
-    reactor.run()
+    def __init__(self, config):
+        self.config = config
+        self.world = tmpDebugWorldRemoveMe()
+        self.factory = TerrariaFactory(self.world, config)
+        serverEndpoint = "tcp:%d:interface=%s" % (
+            self.config.listenPort, self.config.listenAddress)
+        
+        self.endpoint = serverFromString(reactor, serverEndpoint)
+
+    def run(self):
+        logger.debug("Starting Server")
+        self.endpoint.listen(self.factory)
+        logger.debug(
+            "Listening. %s:%d" %
+            (self.config.listenAddress,
+             self.config.listenPort))
+        
+        self.world.start()
+        reactor.run()
