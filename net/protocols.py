@@ -282,11 +282,12 @@ class TerrariaSession(object):
         self.clientNumber = TerrariaSession.getNextAvailableClientNumber()
         self.isAuthed = False
 
-    lastClientNumber = -1
+    nextClientNumber = -1
 
     @classmethod
     def getNextAvailableClientNumber(cls):
-        return cls.lastClientNumber + 1
+        cls.nextClientNumber += 1
+        return cls.nextClientNumber
 
 
 PROTOCOL_VERSION = "Terraria173"
